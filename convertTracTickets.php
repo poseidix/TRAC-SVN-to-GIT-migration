@@ -25,6 +25,10 @@ $nrHashCharacters = 8;
 
 /* END CONFIGURATION */
 
+if (!extension_loaded('sqlite3')) {
+    die('sqlite3 extension missing');
+}
+
 /**
  * Converts a text with references to an SVN revision [1234] into the corresponding GIT revision
  *
