@@ -109,7 +109,7 @@ while ($row = $result->fetchArray())
 	$description = $db->escapeString($row['description']);
 	if (convertSVNIDToGitID($description, $lookupTable, $nrHashCharacters))
 	{	
-		$query = "UPDATE ticket_change SET description='$description' WHERE id = " . $row['id'];
+		$query = "UPDATE ticket SET description='$description' WHERE id = " . $row['id'];
 		$db->exec($query);
 		
 		echo "Updated ticket $i\n";
