@@ -116,10 +116,30 @@ while ($row = $result->fetchArray())
 		$query = "UPDATE ticket SET description='$description' WHERE id = " . $row['id'];
 		$db->exec($query);
 		
-		echo "Updated ticket $i\n";
+		echo "Updated ticket {$row['id']}\n";
+	}
+}
+
+// Convert table 'wiki'
+
+echo "Converting table 'wiki'...\n";
+
+$i = 1;
+
+$result = $db->query('SELECT name, version, text FROM wiki');
+while ($row = $result->fetchArray())
+{
+	$text = $db->escapeString($row['text']);
+	if (convertSVNIDToGitID($text, $lookupTable, $nrHashCharacters))
+	{	
+    	$name = $db->escapeString($row['name']);
+    	$version = (integer)$row['version'];
+		$query = "UPDATE wiki SET text='$text' WHERE name = '$name' AND version = $version";
+		$db->exec($query);
+		
+		echo "Updated wiki $name($version)\n";
 	}
 }
 
 // Done :)
 echo "Done!\n";
-?>
