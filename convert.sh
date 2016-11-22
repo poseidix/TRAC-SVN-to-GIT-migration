@@ -24,7 +24,7 @@ for repoPath in $(find $basePath -type d -name \*.git -prune) ; do
 		echo "* Converting Trac $repo start"
 			
 		# Creates revision-history
-		git --git-dir=$repoPath rev-list --all --pretty=medium > revlist.txt
+		git --git-dir=$repoPath rev-list --all --pretty=medium --grep='; revision=' > revlist.txt
 
 		# Now extract the git hash and the svn ID
 		grep 'revision=\d*' revlist.txt | sed -e 's/.*svn path=.*; revision=\(\d*\)/\1/' > svn.txt
