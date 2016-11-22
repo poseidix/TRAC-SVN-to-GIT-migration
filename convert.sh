@@ -11,18 +11,18 @@ basePath=/path/to/your/repos
 
 # loop over all repositories found
 for repoPath in $(find $basePath -type d -name \*.git -prune) ; do
-    repo=$(basename "$repoPath")
+	repo=$(basename "$repoPath")
 
 	# if argument given, only execute php for the given repository
-    if [ -n "$1" ] && [ $repo != $1 ]
-    then
+	if [ -n "$1" ] && [ $repo != $1 ]
+	then
 		continue
-    fi
+	fi
 
 	# Config file found, this seems to be a repository
 	if [ -f $repoPath/config ]; then
 		echo "* Converting Trac $repo start"
-			
+
 		# Creates revision-history
 		git --git-dir=$repoPath rev-list --all --pretty=medium --grep='; revision=' > revlist.txt
 
