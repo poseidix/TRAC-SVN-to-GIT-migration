@@ -11,7 +11,7 @@ basePath=/path/to/your/repos
 
 # loop over all repositories found
 for repoPath in $(find $basePath -type d -name \*.git -prune) ; do
-	repo=$(basename "$repoPath")
+	repo=$(basename "$repoPath" | sed -e 's/\.git$//')
 
 	# if argument given, only execute php for the given repository
 	if [ -n "$1" ] && [ $repo != $1 ]
