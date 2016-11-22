@@ -34,7 +34,11 @@ for repoPath in $(find $basePath -type d -name \*.git -prune) ; do
 		paste svn.txt git.txt | sort -n > lookupTable.txt
 
 		# Migrate
-		php convertTracTickets.php $repo
+		commits=$(wc -l <lookupTable.txt)
+		echo "$commits SVN commits found"
+		if [ $commits -gt 0 ]; then
+			php convertTracTickets.php $repo
+		fi
 
 		# Clean up
 		rm svn.txt git.txt revlist.txt lookupTable.txt
