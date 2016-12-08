@@ -11,20 +11,20 @@ basePath=/path/to/your/repos
 
 # loop over all repositories found
 for repoPath in $(find $basePath -type d -name \*.git -prune) ; do
-    repo=$(basename "$repoPath")
+	repo=$(echo "$repoPath" | sed -e "s|${basePath}/\?||" | sed -e 's/\.git$//')
 
 	# if argument given, only execute php for the given repository
-    if [ -n "$1" ] && [ $repo != $1 ]
-    then
+	if [ -n "$1" ] && [ $repo != $1 ]
+	then
 		continue
-    fi
+	fi
 
 	# Config file found, this seems to be a repository
 	if [ -f $repoPath/config ]; then
 		echo "* Converting Trac $repo start"
-			
+
 		# Creates revision-history
-		git --git-dir=$repoPath rev-list --all --pretty=medium > revlist.txt
+		git --git-dir=$repoPath rev-list --all --pretty=medium --grep='; revision=' > revlist.txt
 
 		# Now extract the git hash and the svn ID
 		grep 'revision=\d*' revlist.txt | sed -e 's/.*svn path=.*; revision=\(\d*\)/\1/' > svn.txt
@@ -34,7 +34,11 @@ for repoPath in $(find $basePath -type d -name \*.git -prune) ; do
 		paste svn.txt git.txt | sort -n > lookupTable.txt
 
 		# Migrate
-		php convertTracTickets.php $repo
+		commits=$(wc -l <lookupTable.txt)
+		echo "$commits SVN commits found"
+		if [ $commits -gt 0 ]; then
+			php convertTracTickets.php $repo
+		fi
 
 		# Clean up
 		rm svn.txt git.txt revlist.txt lookupTable.txt
