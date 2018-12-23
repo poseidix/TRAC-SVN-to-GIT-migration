@@ -1,6 +1,6 @@
 <?php
 
-/**
+/**https://github.com/therealcurlsport/codecov-python.git
  * This script converts the commit references from SVN IDs to GIT IDs, i.e. changing in all tickets
  * [1234] to [a42v2e3] or whatever the corresponding GIT hash is
  *
